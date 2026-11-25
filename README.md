@@ -81,3 +81,35 @@ npm run build
 ## Configuration IDE recommandée
 
 [VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+
+## Tests de charge (Locust)
+
+Atelier 3 de méthodologie de tests, fait à deux (Maxime Mansiet et Simon Godard) alors que le sujet demande des groupes de 3 ou 4.
+
+### Installation
+
+```sh
+cd test/load
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Le `requirements.txt` vient d'un `pip freeze` dans ce venv, toutes les dépendances sont donc figées.
+
+### Lancement
+
+On teste le build de prod servi par `vite preview` sur un port fixe :
+
+```sh
+npm run build
+npm run preview -- --port 4173 --strictPort
+```
+
+Puis dans un autre terminal, depuis la racine du projet :
+
+```sh
+test/load/.venv/bin/locust -f test/load/locustfile.py --headless -u 10 -r 5 -t 30s --host http://localhost:4173
+```
+
+Sans `--headless`, l'interface web de Locust est sur http://localhost:8089.
